@@ -2,18 +2,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import path from "path";
-import { getToken, isAuthenticated, login, users } from "./azure-client";
+import { getToken, isAuthenticated, login, users, userTokenMap } from "./azure-client";
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import {api} from './api';
 import uuidAPIKey from 'uuid-apikey';
-import { AuthenticationResult } from '@azure/msal-node'
+import { User } from '../types/User';
 
 declare global{
   namespace Express {
       interface Request {
-        user?: AuthenticationResult
+        user?: User & {
+          AuthToken : string
+        }
       }
   }
 }
@@ -32,6 +33,10 @@ app.use(session({
   saveUninitialized : false
 }))
 
+app.get("/", (req, res) => {
+  res.send('Hello World!');
+});
+
 app.get("/login", login);
 
 app.get("/redirect", getToken);
@@ -40,8 +45,8 @@ app.use('/api', api);
 
 app.use(isAuthenticated)
 
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "index.html"));
+app.get("/internal", (req, res) => {
+  res.send('internal');
 });
 
 app.get("/getKey", (req, res) => {
@@ -50,9 +55,9 @@ app.get("/getKey", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  users.delete(req.user.accessToken)
+  userTokenMap.delete(req.user.AuthToken)
   res.cookie('AuthToken', undefined)
-  res.status(200).send('Logout')
+  res.status(204).send('Logout')
 });
 
 app.listen(PORT, () => {

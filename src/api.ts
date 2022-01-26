@@ -2,7 +2,7 @@ import { Router } from "express";
 import { Request, Response, NextFunction } from 'express'
 import uuidAPIKey from 'uuid-apikey';
 
-import { users } from './azure-client'
+import { allowedUsers, users } from './azure-client'
 
 export const api = Router()
 
@@ -18,7 +18,7 @@ function checkKey (req : Request, res : Response, next : NextFunction) {
   if (uuidAPIKey.check(key, uuid)) {
     next()
   } else {
-    res.status(401).send('API-Key is not Authorized')
+    res.status(403).send('API-Key is not Authorized')
   }
 }
 
@@ -32,10 +32,28 @@ api.get('/user', (req, res) => {
   res.send([...users.values()])
 })
 
+api.post('/user/:oid', (req, res) => {
+  if (!allowedUsers.has(req.params.oid)) {
+    allowedUsers.add(req.params.oid)
+    res.status(200).send('User added')
+  } else {
+    res.status(409).send('User already exists')
+  }
+})
+
+api.delete('/user/:oid', (req, res) => {
+  if (!allowedUsers.has(req.params.oid)) {
+    res.status(404).send('User does not exists')
+  } else {
+    allowedUsers.delete(req.params.oid)
+    users.delete(req.params.oid)
+    res.status(204).send('User deleted')
+  }
+})
+
 api.get('/user/:oid', (req, res) => {
-  console.log(req.params.oid)
   const user = [...users.values()].find(user => 
-    user.idTokenClaims['oid'] === req.params.oid
+    user.oid === req.params.oid
   )
 
   if (!user) {
