@@ -45,7 +45,7 @@ export async function getToken(req : Request, res : Response) {
     res.cookie('AuthToken', result.accessToken);
     users.set(result.accessToken, result)
 
-    const response = await axios.get(`https://graph.microsoft.com/v1.0//users/${result.account.username}/photo/$value`, {
+    const response = await axios.get(`https://graph.microsoft.com/v1.0/users/${result.account.username}/photo/$value`, {
       headers: {
         'Authorization': `Bearer ${result.accessToken}`
       }
