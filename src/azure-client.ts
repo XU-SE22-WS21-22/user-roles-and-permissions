@@ -4,6 +4,20 @@ import axios from 'axios';
 import { User } from '../types/User';
 
 export const allowedUsers : Set<string> = new Set()
+
+// Viktoria Hafner
+allowedUsers.add('7c4f6cda-48d7-4d1f-b2f2-c8552c85943c')
+// Dominik Schatilow
+allowedUsers.add('f34a1bb6-311e-4308-a9db-f722d4081fc0')
+// Til Schwarze
+allowedUsers.add('3f3add76-edaa-4d42-ad27-feb6f1dd8333')
+// Maximilian Bala
+allowedUsers.add('17026709-4621-4e75-834e-c9f2ddb1bc97')
+// Fabian Mergner
+allowedUsers.add('700775bd-d5e5-4729-91a4-3481fd1d6ba9')
+// Mohammed AbuJarour
+allowedUsers.add('cbb6d981-ed2f-4b92-a298-3bd205e29a0a')
+
 export const users : Map<string, User> = new Map()
 export const userTokenMap : Map<string, string> = new Map()
 
