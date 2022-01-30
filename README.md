@@ -79,7 +79,7 @@ To start testing the API endpoints and the login feature, visit the localhost:80
 Endpoints require a quick set-up: We need our postman project open and a valid API-Key. You'll get a valid API key after going 
 to localhost:8080/getKey. If you are not logged in, you'll be redirected to the login window.
 
-The postman link is: [Public Postman Workspace](https://www.postman.com/universal-station-246440/workspace/backenddocumentation/overview)
+The postman link is: [Public Postman Workspace](https://documenter.getpostman.com/view/19359032/UVeCR95a)
 
 Inside postman, some endpoints may have some additional documentation that helps you understand the process.
 
